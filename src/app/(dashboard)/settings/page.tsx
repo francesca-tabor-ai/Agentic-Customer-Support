@@ -1,10 +1,27 @@
 "use client";
 
+import { useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { FadeInView } from "@/components/ui/FadeInView";
 import { Button } from "@/components/ui/Button";
 
+function useSaved() {
+  const [saved, setSaved] = useState<string | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const trigger = (key: string) => {
+    if (timer.current) clearTimeout(timer.current);
+    setSaved(key);
+    timer.current = setTimeout(() => setSaved(null), 2000);
+  };
+  return { saved, trigger };
+}
+
 export default function SettingsPage() {
+  const [maxTurns, setMaxTurns] = useState(10);
+  const [temperature, setTemperature] = useState(0.7);
+  const [model, setModel] = useState("GPT-4o");
+  const { saved, trigger } = useSaved();
+
   return (
     <div className="space-y-6">
       <FadeInView variant="fade-up">
@@ -29,7 +46,8 @@ export default function SettingsPage() {
             </label>
             <input
               type="number"
-              defaultValue={10}
+              value={maxTurns}
+              onChange={(e) => setMaxTurns(Number(e.target.value))}
               className="mt-1 w-24 rounded-lg border border-[var(--border)] px-3 py-2 text-sm tabular-nums"
             />
           </div>
@@ -42,11 +60,17 @@ export default function SettingsPage() {
               step="0.1"
               min="0"
               max="2"
-              defaultValue={0.7}
+              value={temperature}
+              onChange={(e) => setTemperature(Number(e.target.value))}
               className="mt-1 w-24 rounded-lg border border-[var(--border)] px-3 py-2 text-sm tabular-nums"
             />
           </div>
-          <Button variant="primary">Save</Button>
+          <div className="flex items-center gap-3">
+            <Button variant="primary" onClick={() => trigger("agent")}>Save</Button>
+            {saved === "agent" && (
+              <span className="text-sm text-emerald-600">Saved</span>
+            )}
+          </div>
         </CardContent>
       </Card>
 
@@ -55,7 +79,11 @@ export default function SettingsPage() {
           <CardTitle>LLM model</CardTitle>
         </CardHeader>
         <CardContent>
-          <select className="w-full max-w-xs rounded-lg border border-[var(--border)] bg-white px-3 py-2 text-sm">
+          <select
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+            className="w-full max-w-xs rounded-lg border border-[var(--border)] bg-white px-3 py-2 text-sm"
+          >
             <optgroup label="OpenAI">
               <option>GPT-4o</option>
               <option>GPT-4o mini</option>
@@ -69,9 +97,14 @@ export default function SettingsPage() {
               <option>Gemini 1.5 Flash</option>
             </optgroup>
           </select>
-          <Button variant="primary" className="mt-4">
-            Save
-          </Button>
+          <div className="mt-4 flex items-center gap-3">
+            <Button variant="primary" onClick={() => trigger("llm")}>
+              Save
+            </Button>
+            {saved === "llm" && (
+              <span className="text-sm text-emerald-600">Saved</span>
+            )}
+          </div>
         </CardContent>
       </Card>
 
@@ -115,7 +148,12 @@ export default function SettingsPage() {
               className="mt-1 w-full max-w-md rounded-lg border border-[var(--border)] px-3 py-2 text-sm"
             />
           </div>
-          <Button variant="primary">Update credentials</Button>
+          <div className="flex items-center gap-3">
+            <Button variant="primary" onClick={() => trigger("creds")}>Update credentials</Button>
+            {saved === "creds" && (
+              <span className="text-sm text-emerald-600">Saved</span>
+            )}
+          </div>
         </CardContent>
       </Card>
     </div>

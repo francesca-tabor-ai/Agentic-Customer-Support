@@ -218,7 +218,7 @@ export default function TicketsPage() {
                         : "mr-4 bg-[var(--foreground)] text-white"
                     }`}
                   >
-                    <span className="text-xs text-[var(--muted-foreground)]">
+                    <span className={`text-xs ${m.role === "agent" ? "text-white/60" : "text-[var(--muted-foreground)]"}`}>
                       {m.role} · {new Date(m.at).toLocaleString()}
                     </span>
                     <p className="mt-1 text-sm">{m.text}</p>

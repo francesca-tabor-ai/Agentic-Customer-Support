@@ -5,6 +5,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { FadeInView } from "@/components/ui/FadeInView";
 import { Button } from "@/components/ui/Button";
 
+function renderBold(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={i}>{part.slice(2, -2)}</strong>
+    ) : (
+      <span key={i}>{part}</span>
+    )
+  );
+}
+
 interface Message {
   id: string;
   role: "user" | "agent";
@@ -113,8 +124,10 @@ export default function ChatPage() {
                     ))}
                   </div>
                 )}
-                <div className="prose prose-invert mt-2 max-w-none text-sm prose-p:my-1">
-                  {msg.content || (streaming && "…")}
+                <div className="mt-2 text-sm leading-relaxed">
+                  {msg.role === "agent"
+                    ? renderBold(msg.content || (streaming ? "…" : ""))
+                    : (msg.content || (streaming && "…"))}
                 </div>
               </div>
             ))}

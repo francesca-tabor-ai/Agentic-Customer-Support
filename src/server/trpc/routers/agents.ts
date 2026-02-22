@@ -1,6 +1,5 @@
 import { router, publicProcedure } from "../init";
 import { agents } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
 
 export const agentsRouter = router({
   list: publicProcedure.query(async ({ ctx }) => {

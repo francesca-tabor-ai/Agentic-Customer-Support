@@ -13,16 +13,17 @@ const mockMetrics: DashboardMetrics = {
   systemHealth: "Operational",
 };
 
+const mockAgents: Agent[] = [
+  { id: "1", name: "Support Agent Alpha", status: "active", conversations: 8 },
+  { id: "2", name: "Support Agent Beta", status: "active", conversations: 5 },
+  { id: "3", name: "Support Agent Gamma", status: "idle", conversations: 0 },
+];
+
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState<DashboardMetrics>(mockMetrics);
-  const [agents, setAgents] = useState<Agent[]>([]);
+  const [agents] = useState<Agent[]>(mockAgents);
 
   useEffect(() => {
-    setAgents([
-      { id: "1", name: "Support Agent Alpha", status: "active", conversations: 8 },
-      { id: "2", name: "Support Agent Beta", status: "active", conversations: 5 },
-      { id: "3", name: "Support Agent Gamma", status: "idle", conversations: 0 },
-    ]);
     const t = setInterval(() => {
       setMetrics((m) => ({
         ...m,

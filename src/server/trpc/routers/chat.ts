@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { router, publicProcedure } from "../init";
-import { conversations, messages } from "@/server/db/schema";
+import { messages } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 
 export const chatRouter = router({

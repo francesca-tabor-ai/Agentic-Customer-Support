@@ -23,12 +23,24 @@ Built for teams who want **faster resolution**, **higher automation rates**, and
 
 ## Getting started
 
+1. Copy `.env.example` to `.env.local` and set `DATABASE_URL` or `DATABASE_PUBLIC_URL` (PostgreSQL).
+2. Run migrations: `npm run db:push` (or `npm run db:migrate`).
+3. (Optional) Seed data: `npm run db:seed`.
+
 ```bash
 npm install
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+### Running tests
+
+Tests require a configured database. Ensure `DATABASE_URL` or `DATABASE_PUBLIC_URL` is set in `.env.local`, then:
+
+```bash
+npm run test
+```
 
 ---
 

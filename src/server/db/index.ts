@@ -3,8 +3,13 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./schema";
 
 /** Prefer DATABASE_PUBLIC_URL (Railway public) for local dev; DATABASE_URL on Railway. */
+/** During next build (static analysis), allow module load without a real DB. */
 const connectionString =
-  process.env.DATABASE_PUBLIC_URL ?? process.env.DATABASE_URL ?? "";
+  process.env.DATABASE_PUBLIC_URL ??
+  process.env.DATABASE_URL ??
+  (process.env.NEXT_PHASE === "phase-production-build"
+    ? "postgresql://localhost:5432/build_placeholder"
+    : "");
 
 if (!connectionString) {
   throw new Error(

@@ -47,7 +47,7 @@ export const ticketsRouter = router({
   create: publicProcedure
     .input(
       z.object({
-        subject: z.string(),
+        subject: z.string().min(1, "Subject is required").max(500),
         priority: z.enum(["low", "medium", "high"]).default("medium"),
       })
     )

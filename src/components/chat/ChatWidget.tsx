@@ -54,6 +54,7 @@ function MessageBubble({ message }: { message: Message }) {
 }
 
 export function ChatWidget() {
+  const msgCounter = useRef(0);
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState("");
@@ -75,8 +76,9 @@ export function ChatWidget() {
     const trimmed = text.trim();
     if (!trimmed || loading) return;
 
+    msgCounter.current += 1;
     const userMsg: Message = {
-      id: `user-${Date.now()}`,
+      id: `user-${msgCounter.current}`,
       role: "user",
       content: trimmed,
     };
@@ -85,16 +87,18 @@ export function ChatWidget() {
     setLoading(true);
 
     // Simulate brief delay then reply from platform guide
+    const delay = 500;
     setTimeout(() => {
+      msgCounter.current += 1;
       const reply = getPlatformGuideReply(trimmed);
       const assistantMsg: Message = {
-        id: `assistant-${Date.now()}`,
+        id: `assistant-${msgCounter.current}`,
         role: "assistant",
         content: reply,
       };
       setMessages((m) => [...m, assistantMsg]);
       setLoading(false);
-    }, 400 + Math.random() * 300);
+    }, delay);
   };
 
   const handleProbe = (probe: PromptProbe) => {

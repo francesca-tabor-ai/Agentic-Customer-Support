@@ -24,7 +24,12 @@ export const knowledgeRouter = router({
   }),
 
   create: publicProcedure
-    .input(z.object({ name: z.string(), chunkCount: z.number().default(0) }))
+    .input(
+      z.object({
+        name: z.string().min(1, "Name is required").max(255),
+        chunkCount: z.number().min(0).default(0),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const id = `doc-${Date.now()}`;
       const now = new Date();

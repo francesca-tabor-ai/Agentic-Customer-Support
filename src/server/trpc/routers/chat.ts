@@ -17,9 +17,9 @@ export const chatRouter = router({
   sendMessage: publicProcedure
     .input(
       z.object({
-        conversationId: z.string(),
+        conversationId: z.string().min(1),
         role: z.enum(["user", "agent"]),
-        content: z.string(),
+        content: z.string().min(1, "Content is required").max(10000),
         toolCalls: z.string().optional(),
       })
     )

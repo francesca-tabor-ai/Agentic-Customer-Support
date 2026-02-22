@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { router, publicProcedure } from "../init";
 import { knowledgeDocuments } from "@/server/db/schema";
-import { eq, like } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 export const knowledgeRouter = router({
   list: publicProcedure

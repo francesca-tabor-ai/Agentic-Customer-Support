@@ -1,7 +1,7 @@
 import { initTRPC } from "@trpc/server";
 import { db } from "@/server/db";
 
-export const createContext = async () => ({ db });
+export const createContext = async (_opts?: { req: Request; resHeaders: Headers }) => ({ db });
 
 const t = initTRPC.context<Awaited<ReturnType<typeof createContext>>>().create();
 

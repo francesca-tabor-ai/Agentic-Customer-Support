@@ -89,15 +89,17 @@ export default function TicketsPage() {
           <div className="flex flex-wrap items-center gap-2">
             <input
               type="search"
-              placeholder="Search tickets…”
+              placeholder="Search tickets..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="rounded-lg border border-[var(--border)] bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--muted)]"
+              className={
+                "rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--muted)]"
+              }
             />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as Status | "all")}
-              className="rounded-lg border border-[var(--border)] bg-white px-3 py-2 text-sm"
+              className="rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm"
             >
               <option value="all">All statuses</option>
               <option value="open">Open</option>
@@ -107,7 +109,7 @@ export default function TicketsPage() {
             <select
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value as Priority | "all")}
-              className="rounded-lg border border-[var(--border)] bg-white px-3 py-2 text-sm"
+              className="rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm"
             >
               <option value="all">All priorities</option>
               <option value="low">Low</option>

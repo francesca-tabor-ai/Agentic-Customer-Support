@@ -112,7 +112,7 @@ export function ChatWidget() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--foreground)] text-white shadow-lg transition-subtle hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--muted)] focus:ring-offset-2"
+        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--foreground)] text-white shadow-lg transition-interactive active-press hover:scale-110 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--muted)] focus:ring-offset-2"
         aria-label={open ? "Close chat" : "Open platform guide"}
       >
         {open ? (
@@ -151,7 +151,7 @@ export function ChatWidget() {
       {/* Chat panel */}
       {open && (
         <div
-          className="fixed bottom-24 right-6 z-40 flex w-[380px] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-lg"
+          className="fixed bottom-24 right-6 z-40 flex w-[380px] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-lg animate-panel-in"
           style={{ maxHeight: "min(560px, 70vh)" }}
           role="dialog"
           aria-label="Platform guide"

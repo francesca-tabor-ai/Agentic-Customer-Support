@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
+import { FadeInView } from "@/components/ui/FadeInView";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 
@@ -22,6 +23,7 @@ export default function KnowledgePage() {
 
   return (
     <div className="space-y-6">
+      <FadeInView variant="fade-up">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-[var(--foreground)]">
@@ -33,6 +35,7 @@ export default function KnowledgePage() {
         </div>
         <Button variant="primary">Upload document</Button>
       </div>
+      </FadeInView>
 
       <Card>
         <CardHeader>
@@ -49,7 +52,7 @@ export default function KnowledgePage() {
             {filtered.map((doc) => (
               <div
                 key={doc.id}
-                className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-[var(--border)] p-4"
+                className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-[var(--border)] p-4 transition-colors hover:bg-[var(--border)]/50"
               >
                 <div>
                   <p className="font-medium text-[var(--foreground)]">{doc.name}</p>

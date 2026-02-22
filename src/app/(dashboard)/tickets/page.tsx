@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
+import { FadeInView } from "@/components/ui/FadeInView";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 
@@ -77,13 +78,16 @@ export default function TicketsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-[var(--foreground)]">Tickets</h1>
+      <FadeInView variant="fade-up">
+        <div>
+          <h1 className="text-3xl font-bold text-[var(--foreground)]">Tickets</h1>
         <p className="mt-1 text-[var(--muted-foreground)] leading-relaxed">
           Filter, search, and manage support tickets.
         </p>
-      </div>
+        </div>
+      </FadeInView>
 
+      <FadeInView delay={50} variant="fade-up">
       <Card>
         <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
@@ -136,7 +140,7 @@ export default function TicketsPage() {
                 {filtered.map((t) => (
                   <tr
                     key={t.id}
-                    className="border-b border-[var(--border)] last:border-0"
+                    className="border-b border-[var(--border)] last:border-0 transition-colors hover:bg-[var(--border)]/50"
                   >
                     <td className="py-3 font-medium tabular-nums">{t.id}</td>
                     <td className="py-3">{t.subject}</td>
@@ -178,6 +182,7 @@ export default function TicketsPage() {
           </div>
         </CardContent>
       </Card>
+      </FadeInView>
 
       <Modal
         isOpen={!!selected}

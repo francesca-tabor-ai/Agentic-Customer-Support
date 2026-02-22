@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 export const metadata: Metadata = {
   title: "Enterprise AI Support Platform",
@@ -22,6 +23,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased font-sans">
+        <ScrollToTop />
         {children}
       </body>
     </html>

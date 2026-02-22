@@ -30,7 +30,7 @@ export function Sidebar() {
             <Link
               key={href}
               href={href}
-              className={`block rounded-lg px-3 py-2 text-sm font-medium transition-subtle ${
+              className={`block rounded-lg px-3 py-2 text-sm font-medium transition-interactive active-press ${
                 isActive
                   ? "bg-[var(--foreground)] text-white"
                   : "text-[var(--muted-foreground)] hover:bg-[var(--border)] hover:text-[var(--foreground)]"

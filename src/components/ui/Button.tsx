@@ -13,7 +13,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const base =
-    "inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-subtle focus:outline-none focus:ring-2 focus:ring-[var(--muted)] focus:ring-offset-2 disabled:opacity-50";
+    "inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-interactive active-press focus:outline-none focus:ring-2 focus:ring-[var(--muted)] focus:ring-offset-2 disabled:opacity-50 disabled:active:transform-none";
   const variants = {
     primary:
       "bg-[var(--foreground)] text-white hover:opacity-90",

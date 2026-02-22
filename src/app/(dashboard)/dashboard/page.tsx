@@ -2,6 +2,7 @@
 
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { FadeInView } from "@/components/ui/FadeInView";
 import type { Agent, DashboardMetrics } from "@/types";
 import { useEffect, useState } from "react";
 
@@ -36,45 +37,59 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-[var(--foreground)]">
-          Dashboard
-        </h1>
-        <p className="mt-1 text-[var(--muted-foreground)] leading-relaxed">
-          Real-time overview of agents, tickets, and system health.
-        </p>
-      </div>
+      <FadeInView variant="fade-up">
+        <div>
+          <h1 className="text-3xl font-bold text-[var(--foreground)]">
+            Dashboard
+          </h1>
+          <p className="mt-1 text-[var(--muted-foreground)] leading-relaxed">
+            Real-time overview of agents, tickets, and system health.
+          </p>
+        </div>
+      </FadeInView>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <MetricCard title="Active agents" value={metrics.activeAgents} />
-        <MetricCard
-          title="Ticket volume"
-          value={metrics.ticketVolume.toLocaleString()}
-          subtitle="This month"
-        />
-        <MetricCard
-          title="Automation rate"
-          value={`${metrics.automationRate}%`}
-          trend="up"
-          subtitle="+2% vs last week"
-        />
-        <MetricCard
-          title="Avg response time"
-          value={metrics.avgResponseTime}
-          subtitle="Target: &lt;2m"
-        />
-        <MetricCard
-          title="System health"
-          value={metrics.systemHealth}
-          subtitle="All systems nominal"
-        />
+        {[
+          { title: "Active agents", value: metrics.activeAgents },
+          {
+            title: "Ticket volume",
+            value: metrics.ticketVolume.toLocaleString(),
+            subtitle: "This month",
+          },
+          {
+            title: "Automation rate",
+            value: `${metrics.automationRate}%`,
+            trend: "up" as const,
+            subtitle: "+2% vs last week",
+          },
+          {
+            title: "Avg response time",
+            value: metrics.avgResponseTime,
+            subtitle: "Target: <2m",
+          },
+          {
+            title: "System health",
+            value: metrics.systemHealth,
+            subtitle: "All systems nominal",
+          },
+        ].map((m, i) => (
+          <FadeInView key={m.title} delay={i * 50} variant="fade-up">
+            <MetricCard
+              title={m.title}
+              value={m.value}
+              subtitle={m.subtitle}
+              trend={"trend" in m ? m.trend : undefined}
+            />
+          </FadeInView>
+        ))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Agent status</CardTitle>
-          </CardHeader>
+        <FadeInView delay={100} variant="fade-up">
+          <Card>
+            <CardHeader>
+              <CardTitle>Agent status</CardTitle>
+            </CardHeader>
           <CardContent>
             <ul className="space-y-3">
               {agents.map((a) => (
@@ -101,12 +116,14 @@ export default function DashboardPage() {
               ))}
             </ul>
           </CardContent>
-        </Card>
+          </Card>
+        </FadeInView>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Processing queue</CardTitle>
-          </CardHeader>
+        <FadeInView delay={150} variant="fade-up">
+          <Card>
+            <CardHeader>
+              <CardTitle>Processing queue</CardTitle>
+            </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex justify-between text-sm">
@@ -125,7 +142,8 @@ export default function DashboardPage() {
               </div>
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </FadeInView>
       </div>
     </div>
   );

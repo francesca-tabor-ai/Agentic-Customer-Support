@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { FadeInView } from "@/components/ui/FadeInView";
 import { useState } from "react";
 
 type NodeType = "retrieval" | "tool" | "decision" | "execution" | "end";
@@ -35,6 +36,7 @@ export default function WorkflowPage() {
 
   return (
     <div className="space-y-6">
+      <FadeInView variant="fade-up">
       <div>
         <h1 className="text-3xl font-bold text-[var(--foreground)]">
           Agent workflow
@@ -43,6 +45,7 @@ export default function WorkflowPage() {
           LangGraph execution flow and step-by-step traces.
         </p>
       </div>
+      </FadeInView>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
@@ -57,7 +60,7 @@ export default function WorkflowPage() {
                     <button
                       type="button"
                       onClick={() => setSelectedNode(node)}
-                      className={`rounded-xl border-2 px-4 py-2 text-sm font-medium transition-subtle ${nodeStyles[node.type]} ${
+                      className={`rounded-xl border-2 px-4 py-2 text-sm font-medium transition-interactive active-press ${nodeStyles[node.type]} ${
                         selectedNode?.id === node.id
                           ? "ring-2 ring-[var(--foreground)] ring-offset-2"
                           : "hover:opacity-90"

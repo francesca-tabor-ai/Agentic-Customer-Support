@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { FadeInView } from "@/components/ui/FadeInView";
 
 const dateRanges = ["7d", "30d", "90d"] as const;
 
@@ -14,6 +15,7 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-6">
+      <FadeInView variant="fade-up">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-[var(--foreground)]">
@@ -29,7 +31,7 @@ export default function AnalyticsPage() {
               key={r}
               type="button"
               onClick={() => setRange(r)}
-              className={`rounded-lg px-3 py-2 text-sm font-medium transition-subtle ${
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition-interactive active-press ${
                 range === r
                   ? "bg-[var(--foreground)] text-white"
                   : "border border-[var(--border)] hover:bg-[var(--border)]"
@@ -40,6 +42,7 @@ export default function AnalyticsPage() {
           ))}
         </div>
       </div>
+      </FadeInView>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <Card>
@@ -126,19 +129,19 @@ export default function AnalyticsPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b border-[var(--border)]">
+                <tr className="border-b border-[var(--border)] transition-colors hover:bg-[var(--border)]/50">
                   <td className="py-3 font-medium">Support Agent Alpha</td>
                   <td className="py-3 tabular-nums">312</td>
                   <td className="py-3 tabular-nums">8.2m</td>
                   <td className="py-3 tabular-nums">4.6/5</td>
                 </tr>
-                <tr className="border-b border-[var(--border)]">
+                <tr className="border-b border-[var(--border)] transition-colors hover:bg-[var(--border)]/50">
                   <td className="py-3 font-medium">Support Agent Beta</td>
                   <td className="py-3 tabular-nums">287</td>
                   <td className="py-3 tabular-nums">7.1m</td>
                   <td className="py-3 tabular-nums">4.8/5</td>
                 </tr>
-                <tr>
+                <tr className="transition-colors hover:bg-[var(--border)]/50">
                   <td className="py-3 font-medium">Support Agent Gamma</td>
                   <td className="py-3 tabular-nums">198</td>
                   <td className="py-3 tabular-nums">9.0m</td>

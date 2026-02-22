@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { FadeInView } from "@/components/ui/FadeInView";
 import { Button } from "@/components/ui/Button";
 
 interface Message {
@@ -75,6 +76,7 @@ export default function ChatPage() {
 
   return (
     <div className="space-y-6">
+      <FadeInView variant="fade-up">
       <div>
         <h1 className="text-3xl font-bold text-[var(--foreground)]">
           Chat demo
@@ -83,6 +85,7 @@ export default function ChatPage() {
           Try the agent with tool calls and streaming responses.
         </p>
       </div>
+      </FadeInView>
 
       <Card className="flex max-h-[calc(100vh-16rem)] flex-col">
         <CardHeader>

@@ -33,11 +33,11 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
       aria-modal="true"
     >
       <div
-        className="absolute inset-0 bg-black/20"
+        className="absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity animate-fade-in"
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="relative z-10 w-full max-w-lg rounded-xl border border-[var(--border)] bg-white p-6 shadow-soft">
+      <div className="relative z-10 w-full max-w-lg rounded-xl border border-[var(--border)] bg-white p-6 shadow-soft animate-modal-in">
         {title && (
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-semibold text-[var(--foreground)]">

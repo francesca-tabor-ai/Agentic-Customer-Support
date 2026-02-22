@@ -21,4 +21,15 @@ Built for teams who want **faster resolution**, **higher automation rates**, and
 
 ---
 
+## Getting started
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+---
+
 *Enterprise AI Support Platform — Where AI agents and human oversight work together.*

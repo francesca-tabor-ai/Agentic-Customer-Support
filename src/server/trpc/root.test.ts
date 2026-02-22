@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import path from "path";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { db } from "@/server/db";
 import { appRouter } from "@/server/trpc/root";
 import { createContext } from "@/server/trpc/init";

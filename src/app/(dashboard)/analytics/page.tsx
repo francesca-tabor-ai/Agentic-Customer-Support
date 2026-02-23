@@ -6,12 +6,33 @@ import { FadeInView } from "@/components/ui/FadeInView";
 
 const dateRanges = ["7d", "30d", "90d"] as const;
 
-const mockAutomationData = [62, 65, 64, 67, 68, 70, 67];
-const mockTicketData = [120, 145, 132, 158, 142, 165, 150];
-const mockCostData = [420, 480, 450, 520, 490, 510, 480];
+const mockDataByRange = {
+  "7d": {
+    automation: [62, 65, 64, 67, 68, 70, 67],
+    tickets: [120, 145, 132, 158, 142, 165, 150],
+    cost: [420, 480, 450, 520, 490, 510, 480],
+    ticketLabel: "Daily tickets",
+    costLabel: "Daily cost ($)",
+  },
+  "30d": {
+    automation: [58, 60, 62, 63, 65, 64, 67],
+    tickets: [450, 520, 480, 610, 520, 580, 540],
+    cost: [1800, 2100, 1950, 2300, 2050, 2200, 2000],
+    ticketLabel: "Weekly tickets",
+    costLabel: "Weekly cost ($)",
+  },
+  "90d": {
+    automation: [52, 55, 57, 60, 62, 65, 68],
+    tickets: [1200, 1400, 1350, 1600, 1500, 1700, 1650],
+    cost: [5800, 6200, 5900, 6700, 6300, 6800, 6500],
+    ticketLabel: "Monthly tickets",
+    costLabel: "Monthly cost ($)",
+  },
+} as const;
 
 export default function AnalyticsPage() {
   const [range, setRange] = useState<(typeof dateRanges)[number]>("30d");
+  const data = mockDataByRange[range];
 
   return (
     <div className="space-y-6">
@@ -53,7 +74,7 @@ export default function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="flex h-32 items-end gap-1">
-              {mockAutomationData.map((v, i) => (
+              {data.automation.map((v, i) => (
                 <div
                   key={i}
                   className="flex-1 rounded-t gradient-accent min-h-[20%] transition-all"
@@ -63,7 +84,7 @@ export default function AnalyticsPage() {
               ))}
             </div>
             <p className="mt-2 text-xs text-[var(--muted-foreground)]">
-              Last 7 data points
+              Last {data.automation.length} data points · peak {Math.max(...data.automation)}%
             </p>
           </CardContent>
         </Card>
@@ -75,17 +96,17 @@ export default function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="flex h-32 items-end gap-1">
-              {mockTicketData.map((v, i) => (
+              {data.tickets.map((v, i) => (
                 <div
                   key={i}
                   className="flex-1 rounded-t bg-[var(--border)] min-h-[10%] transition-all"
-                  style={{ height: `${(v / 200) * 100}%` }}
+                  style={{ height: `${(v / Math.max(...data.tickets)) * 100}%` }}
                   title={String(v)}
                 />
               ))}
             </div>
             <p className="mt-2 text-xs text-[var(--muted-foreground)]">
-              Tickets per period
+              {data.ticketLabel} · total {data.tickets.reduce((a, b) => a + b, 0).toLocaleString()}
             </p>
           </CardContent>
         </Card>
@@ -97,17 +118,17 @@ export default function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="flex h-32 items-end gap-1">
-              {mockCostData.map((v, i) => (
+              {data.cost.map((v, i) => (
                 <div
                   key={i}
                   className="flex-1 rounded-t bg-[var(--foreground)] min-h-[10%] opacity-80 transition-all"
-                  style={{ height: `${(v / 600) * 100}%` }}
+                  style={{ height: `${(v / Math.max(...data.cost)) * 100}%` }}
                   title={`$${v}`}
                 />
               ))}
             </div>
             <p className="mt-2 text-xs text-[var(--muted-foreground)]">
-              Est. cost ($)
+              {data.costLabel} · total ${data.cost.reduce((a, b) => a + b, 0).toLocaleString()}
             </p>
           </CardContent>
         </Card>

@@ -19,7 +19,9 @@ interface Ticket {
   messages: { role: "user" | "agent"; text: string; at: string }[];
 }
 
-const mockTickets: Ticket[] = [
+const AGENTS = ["Support Agent Alpha", "Support Agent Beta", "Support Agent Gamma"];
+
+const initialTickets: Ticket[] = [
   {
     id: "T-1001",
     subject: "Billing discrepancy on last invoice",
@@ -59,13 +61,14 @@ const mockTickets: Ticket[] = [
 ];
 
 export default function TicketsPage() {
+  const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
   const [statusFilter, setStatusFilter] = useState<Status | "all">("all");
   const [priorityFilter, setPriorityFilter] = useState<Priority | "all">("all");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Ticket | null>(null);
 
   const filtered = useMemo(() => {
-    return mockTickets.filter((t) => {
+    return tickets.filter((t) => {
       const matchStatus = statusFilter === "all" || t.status === statusFilter;
       const matchPriority = priorityFilter === "all" || t.priority === priorityFilter;
       const matchSearch =
@@ -74,7 +77,25 @@ export default function TicketsPage() {
         t.id.toLowerCase().includes(search.toLowerCase());
       return matchStatus && matchPriority && matchSearch;
     });
-  }, [statusFilter, priorityFilter, search]);
+  }, [tickets, statusFilter, priorityFilter, search]);
+
+  function updateTicket(id: string, patch: Partial<Ticket>) {
+    setTickets((ts) => ts.map((t) => (t.id === id ? { ...t, ...patch } : t)));
+    setSelected((s) => (s?.id === id ? { ...s, ...patch } : s));
+  }
+
+  function handleResolve(id: string) {
+    updateTicket(id, { status: "resolved" });
+  }
+
+  function handleAssign(id: string, currentAgent?: string) {
+    const next = AGENTS[(AGENTS.indexOf(currentAgent ?? "") + 1) % AGENTS.length];
+    updateTicket(id, { agent: next, status: "in_progress" });
+  }
+
+  function handleEscalate(id: string) {
+    updateTicket(id, { priority: "high", status: "in_progress" });
+  }
 
   return (
     <div className="space-y-6">
@@ -192,10 +213,18 @@ export default function TicketsPage() {
         {selected && (
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
-              <span className="rounded-full bg-[var(--border)] px-2 py-0.5 text-xs">
-                {selected.status}
+              <span
+                className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                  selected.status === "resolved"
+                    ? "bg-emerald-100 text-emerald-800"
+                    : selected.status === "in_progress"
+                      ? "bg-amber-100 text-amber-800"
+                      : "bg-[var(--border)] text-[var(--muted-foreground)]"
+                }`}
+              >
+                {selected.status.replace("_", " ")}
               </span>
-              <span className="rounded-full bg-[var(--border)] px-2 py-0.5 text-xs">
+              <span className="rounded-full bg-[var(--border)] px-2 py-0.5 text-xs capitalize">
                 {selected.priority}
               </span>
               {selected.agent && (
@@ -227,9 +256,27 @@ export default function TicketsPage() {
               </ul>
             </div>
             <div className="flex flex-wrap gap-2 border-t border-[var(--border)] pt-4">
-              <Button variant="primary">Assign</Button>
-              <Button variant="secondary">Resolve</Button>
-              <Button variant="ghost">Escalate</Button>
+              <Button
+                variant="primary"
+                onClick={() => handleAssign(selected.id, selected.agent)}
+                disabled={selected.status === "resolved"}
+              >
+                Assign
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => handleResolve(selected.id)}
+                disabled={selected.status === "resolved"}
+              >
+                {selected.status === "resolved" ? "Resolved" : "Resolve"}
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => handleEscalate(selected.id)}
+                disabled={selected.status === "resolved" || selected.priority === "high"}
+              >
+                Escalate
+              </Button>
             </div>
           </div>
         )}

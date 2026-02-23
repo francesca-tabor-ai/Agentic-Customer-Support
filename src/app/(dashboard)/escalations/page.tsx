@@ -8,27 +8,44 @@ import type { EscalatedTicket, SlaStatus } from "@/types";
 import Link from "next/link";
 import { useMemo } from "react";
 
+function hoursAgo(h: number) {
+  return new Date(Date.now() - h * 3_600_000).toISOString();
+}
+function hoursFromNow(h: number) {
+  return new Date(Date.now() + h * 3_600_000).toISOString();
+}
+
 const mockEscalatedTickets: EscalatedTicket[] = [
+  {
+    id: "T-1004",
+    subject: "Enterprise SSO integration failing",
+    priority: "high",
+    status: "open",
+    createdAt: hoursAgo(6),
+    escalatedAt: hoursAgo(3),
+    slaDueAt: hoursAgo(1),
+    slaStatus: "breached",
+  },
   {
     id: "T-1001",
     subject: "Billing discrepancy on last invoice",
     priority: "high",
     status: "in_progress",
     agent: "Support Agent Alpha",
-    createdAt: "2025-02-20T10:00:00Z",
-    escalatedAt: "2025-02-22T08:00:00Z",
-    slaDueAt: "2025-02-22T14:00:00Z",
+    createdAt: hoursAgo(48),
+    escalatedAt: hoursAgo(2),
+    slaDueAt: hoursFromNow(1),
     slaStatus: "at_risk",
   },
   {
-    id: "T-1004",
-    subject: "Enterprise SSO integration failing",
+    id: "T-1006",
+    subject: "Critical: Payment processing down",
     priority: "high",
     status: "open",
-    createdAt: "2025-02-22T06:30:00Z",
-    escalatedAt: "2025-02-22T08:15:00Z",
-    slaDueAt: "2025-02-22T10:30:00Z",
-    slaStatus: "breached",
+    createdAt: hoursAgo(4),
+    escalatedAt: hoursAgo(1),
+    slaDueAt: hoursFromNow(0.5),
+    slaStatus: "at_risk",
   },
   {
     id: "T-1005",
@@ -36,20 +53,10 @@ const mockEscalatedTickets: EscalatedTicket[] = [
     priority: "medium",
     status: "in_progress",
     agent: "Support Agent Beta",
-    createdAt: "2025-02-21T14:30:00Z",
-    escalatedAt: "2025-02-22T07:00:00Z",
-    slaDueAt: "2025-02-23T07:00:00Z",
+    createdAt: hoursAgo(26),
+    escalatedAt: hoursAgo(3),
+    slaDueAt: hoursFromNow(24),
     slaStatus: "ok",
-  },
-  {
-    id: "T-1006",
-    subject: "Critical: Payment processing down",
-    priority: "high",
-    status: "open",
-    createdAt: "2025-02-22T09:00:00Z",
-    escalatedAt: "2025-02-22T09:30:00Z",
-    slaDueAt: "2025-02-22T13:00:00Z",
-    slaStatus: "at_risk",
   },
 ];
 

@@ -1,24 +1,71 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { FadeInView } from "@/components/ui/FadeInView";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 
-const mockDocs = [
+interface Doc {
+  id: string;
+  name: string;
+  chunks: number;
+  retrievals: number;
+  lastUpdated: string;
+}
+
+const initialDocs: Doc[] = [
   { id: "1", name: "Billing FAQ", chunks: 12, retrievals: 342, lastUpdated: "2025-02-20" },
   { id: "2", name: "API Reference v2", chunks: 45, retrievals: 1203, lastUpdated: "2025-02-18" },
   { id: "3", name: "Security & compliance", chunks: 8, retrievals: 89, lastUpdated: "2025-02-15" },
 ];
 
-export default function KnowledgePage() {
-  const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<(typeof mockDocs)[0] | null>(null);
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
 
-  const filtered = mockDocs.filter(
-    (d) =>
-      !search || d.name.toLowerCase().includes(search.toLowerCase())
+export default function KnowledgePage() {
+  const [docs, setDocs] = useState<Doc[]>(initialDocs);
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<Doc | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const nextId = useRef(docs.length + 1);
+
+  function showToast(msg: string) {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setToast(msg);
+    toastTimer.current = setTimeout(() => setToast(null), 2500);
+  }
+
+  function handleDelete(id: string) {
+    setDocs((ds) => ds.filter((d) => d.id !== id));
+    if (selected?.id === id) setSelected(null);
+    showToast("Document deleted.");
+  }
+
+  function handleUpdate(id: string) {
+    setDocs((ds) =>
+      ds.map((d) => (d.id === id ? { ...d, lastUpdated: today() } : d))
+    );
+    showToast("Document updated.");
+  }
+
+  function handleUpload() {
+    nextId.current += 1;
+    const newDoc: Doc = {
+      id: String(nextId.current),
+      name: `New document ${nextId.current}`,
+      chunks: 0,
+      retrievals: 0,
+      lastUpdated: today(),
+    };
+    setDocs((ds) => [...ds, newDoc]);
+    showToast("Document uploaded.");
+  }
+
+  const filtered = docs.filter(
+    (d) => !search || d.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -33,7 +80,12 @@ export default function KnowledgePage() {
             Documents, embeddings, and retrieval performance.
           </p>
         </div>
-        <Button variant="primary">Upload document</Button>
+        <div className="flex items-center gap-3">
+          {toast && (
+            <span className="text-sm text-emerald-600">{toast}</span>
+          )}
+          <Button variant="primary" onClick={handleUpload}>Upload document</Button>
+        </div>
       </div>
       </FadeInView>
 
@@ -49,6 +101,9 @@ export default function KnowledgePage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
+            {filtered.length === 0 && (
+              <p className="text-sm text-[var(--muted-foreground)]">No documents found.</p>
+            )}
             {filtered.map((doc) => (
               <div
                 key={doc.id}
@@ -65,8 +120,14 @@ export default function KnowledgePage() {
                   <Button variant="ghost" onClick={() => setSelected(doc)}>
                     View
                   </Button>
-                  <Button variant="secondary">Update</Button>
-                  <Button variant="ghost" className="text-red-600">
+                  <Button variant="secondary" onClick={() => handleUpdate(doc.id)}>
+                    Update
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="text-red-600"
+                    onClick={() => handleDelete(doc.id)}
+                  >
                     Delete
                   </Button>
                 </div>
